@@ -33,45 +33,68 @@ AWS 리소스를 생성하려면 terraform apply 명령을 실행합니다.
 terraform apply
 ```
 
-```
-모든 네임스페이스 조회
-kubectl get svc --all-namespaces
+## Namespace
 
-포드 조회
-kubectl get pods -n [네임스페이스 이름]
+```bash
+# 모든 네임스페이스 조회
+$ kubectl get svc --all-namespaces
 
-포드 삭제
-kubectl delete pod $POD_NAME -n kube-system
-
-kubectl get deployment -n [네임스페이스 이름]
-
-kubectl delete deployment
-
+# 네임스페이스 삭제
+$ kubectl delete ns klock
 ```
 
-kubectl delete ns klock
+## Deployment
 
-kubectl delete ingress klock-api-app-ingress -n klock
+```bash
+# 디플로이먼트 목록 가져오기
+$ kubectl get deployment -n [NAMESPACE NAME]
 
-아래 명령어를 날리고 결과가 없다면 ingress가 default 네임스페이스에 제대로 적용이 안되었다는 이야기 입니다.
+# 디플로이먼트 삭제
+$ kubectl delete deployment [DEPLOYMENT NAME] -n [NAMESPACE NAME]
+```
 
-kubectl get ingress -o yaml
+## Ingress
 
-kubectl get endpoints klock-api-app-service
+```bash
+# 적용된 Ingress 정보 가져오기
+kubectl get ingress -o yaml -n [NAMESPACE NAME]
 
-klock-api-app-deployment
+# Ingress 삭제
+kubectl delete ingress [INGRESS NAME] -n [NAMESPACE NAME]
+```
 
-연결 상태 확인
+## Service
 
-Ingress 연결
-kubectl get ingress -o wide -n klock
+```bash
+# 서비스 엔드포인트 가져오기
+$ kubectl get endpoints [SERVICE NAME]
 
-Service 연결
-kubectl get services -o wide -n klock
+# 서비스 삭제
+$ kubectl delete service [SERVICE NAME] -n [NAMESPACE NAME]
+```
 
-라벨로 포드 정보 가져오기
-kubectl get pods -l app=klock-api-app-pod -n klock
+## Pod
 
-ALB Controller 로그 확인
-kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-load-balancer-controller
-kubectl logs -n kube-system [NAME]
+```bash
+# 포드 목록 조회
+$ kubectl get pods -n [NAMESPACE NAME]
+
+# 포드 삭제
+$ kubectl delete pod [포드 이름] -n [NAMESPACE NAME]
+
+# 라벨로 포드 정보 가져오기
+$ kubectl get pods -l app=klock-api-app-pod -n [NAMESPACE NAME]
+```
+
+## 트러블슈팅
+
+```bash
+# ALB Controller 로그 확인
+$ kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-load-balancer-controller
+
+# Ingress 연결 확인
+$ kubectl get ingress -o wide -n [NAMESPACE NAME]
+
+# Service 연결 확인
+$ kubectl get services -o wide -n [NAMESPACE NAME]
+```
