@@ -30,13 +30,7 @@ resource "aws_eks_cluster" "this" {
   name     = local.cluster_name
   role_arn = aws_iam_role.eks_cluster.arn
 
-  enabled_cluster_log_types = [
-    "api",
-    "audit",
-    "authenticator",
-    "controllerManager",
-    "scheduler"
-  ]
+  enabled_cluster_log_types = []
 
   vpc_config {
     subnet_ids = values(aws_subnet.this)[*].id
