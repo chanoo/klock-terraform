@@ -1,9 +1,7 @@
 # security_groups.tf
 
 resource "aws_security_group" "worker_mgmt" {
-  for_each = toset(["one", "two"])
-
-  name_prefix = "worker_mgmt_${each.key}"
+  name_prefix = "worker_mgmt"
   description = "Allow Kubernetes API server access from a specific security group"
   vpc_id      = aws_vpc.this.id
 
@@ -23,9 +21,7 @@ resource "aws_security_group" "worker_mgmt" {
 }
 
 resource "aws_security_group_rule" "worker_mgmt_control_plane" {
-  for_each = toset(["one", "two"])
-
-  security_group_id = aws_security_group.worker_mgmt[each.key].id
+  security_group_id = aws_security_group.worker_mgmt.id
 
   type        = "ingress"
   from_port   = 443
@@ -36,6 +32,6 @@ resource "aws_security_group_rule" "worker_mgmt_control_plane" {
   depends_on = [aws_eks_cluster.this]
 }
 
-output "worker_mgmt_sg_ids" {
-  value = { for k, sg in aws_security_group.worker_mgmt : k => sg.id }
+output "worker_mgmt_sg_id" {
+  value = aws_security_group.worker_mgmt.id
 }
