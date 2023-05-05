@@ -38,6 +38,10 @@ resource "aws_eip" "nat" {
   count = 2
 
   vpc = true
+
+  tags = {
+    Name = "eip-nat-${count.index + 1}"
+  }
 }
 
 resource "aws_nat_gateway" "this" {
@@ -45,6 +49,10 @@ resource "aws_nat_gateway" "this" {
 
   allocation_id = aws_eip.nat[count.index].id
   subnet_id     = aws_subnet.this["public-${["a", "b"][count.index]}"].id
+
+  tags = {
+    Name = "nat-${["a", "b"][count.index]}"
+  }
 }
 
 resource "aws_route_table" "private" {
