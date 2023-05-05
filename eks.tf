@@ -2,7 +2,8 @@
 
 locals {
   cluster_name = "klock-eks-cluster"
-} 
+  oidc_issuer_host = "https://oidc.eks.ap-northeast-2.amazonaws.com/id/91BE807A0EC9EE1737CBD52685DA8FF7"
+}
 
 resource "kubernetes_namespace" "klock_namespace" {
   metadata {
@@ -44,11 +45,6 @@ resource "aws_eks_cluster" "this" {
   tags = {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
   }
-}
-
-# OIDC 프로바이더 생성
-locals {
-  oidc_issuer_host = "https://oidc.eks.ap-northeast-2.amazonaws.com/id/91BE807A0EC9EE1737CBD52685DA8FF7"
 }
 
 resource "aws_iam_openid_connect_provider" "this" {
