@@ -143,11 +143,16 @@ resource "aws_route53_record" "cert_validation" {
     }
   }
 
+  allow_overwrite = true
   zone_id = data.aws_route53_zone.klock_route53_zone.zone_id
   name    = each.value.name
   type    = each.value.type
   records = [each.value.record]
   ttl     = 60
+
+  lifecycle {
+    ignore_changes = [records]
+  }
 }
 
 resource "aws_acm_certificate_validation" "cert" {
