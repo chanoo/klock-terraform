@@ -3,18 +3,13 @@
 resource "aws_acm_certificate" "this" {
   domain_name       = "klock.app"
   validation_method = "DNS"
-
   subject_alternative_names = [
     "api.klock.app",
-    "dev-api.klock.app",
-    "www.klock.app"
   ]
-
   tags = {
     Terraform = "true"
-    Environment = "dev"
+    Environment = "Prod"
   }
-
   lifecycle {
     create_before_destroy = true
   }
@@ -29,6 +24,7 @@ resource "aws_route53_record" "this_acm_validation" {
     }
   }
 
+  allow_overwrite = true
   zone_id = data.aws_route53_zone.klock_route53_zone.zone_id
   name    = each.value.name
   type    = each.value.type
