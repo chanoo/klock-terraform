@@ -1,4 +1,4 @@
-# klock.app.s3.tf
+# s3.resource.klock.app.tf
 
 provider "aws" {
   alias  = "useast1"
